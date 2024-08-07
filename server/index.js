@@ -2,6 +2,7 @@ import { createServer } from 'node:http'
 import { createReadStream } from 'node:fs'
 import { Readable, Transform } from 'node:stream'
 import { WritableStream, TransformStream } from 'node:stream/web'
+import { setTimeout } from 'node:timers/promises'
 import csvtojson from 'csvtojson'
 
 const PORT = 3000
@@ -33,7 +34,8 @@ createServer(async (request, response) => {
       }
     }))
     .pipeTo(new WritableStream({
-      write(chunk) {
+      async write(chunk) {
+        await setTimeout(1000)
         lines += 1
         response.write(chunk)
       },
